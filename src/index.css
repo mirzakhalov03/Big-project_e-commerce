@@ -4,11 +4,10 @@
 
 /* HTML: <div class="loader"></div> */
 .loader {
-    width: 50px;
-    --b: 8px; 
+    width: 150px;
+    --b: 28px; 
     aspect-ratio: 1;
     border-radius: 50%;
-    padding: 1px;
     background: conic-gradient(#0000 10%,#f03355) content-box;
     -webkit-mask:
       repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),

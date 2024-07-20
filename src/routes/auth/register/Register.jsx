@@ -3,12 +3,14 @@ import { Button, Checkbox, Form, Input, Divider, message } from 'antd';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from '../../../api';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
 
   const onFinish = async (values) => {
     console.log('Success:', values);
@@ -31,6 +33,8 @@ const Register = () => {
       setLoading(false);
     }
     form.resetFields();
+    navigate("/auth");
+
   };
 
   const onFinishFailed = (errorInfo) => {
