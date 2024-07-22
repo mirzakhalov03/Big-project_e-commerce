@@ -5,6 +5,7 @@ import Register from "./auth/register/Register"
 const Home = lazy(() => import("./home/Home"))
 const Auth = lazy(() => import("./auth/Auth"))
 import Suspense from "../utils/index"
+const Dashboard = lazy(() => import("./dasboard/Dashboard"))
 
 
 const RouteController = () => {
@@ -27,6 +28,10 @@ const RouteController = () => {
                     element: <Suspense><Register/></Suspense>
                 }
             ]
+        },
+        {
+            path: "dashboard",
+            element: <Suspense><Dashboard/></Suspense>
         }
     ])
   

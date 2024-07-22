@@ -2,38 +2,39 @@ import React, { useState } from 'react';
 import { Button, Checkbox, Form, Input, Divider, message } from 'antd';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from '../../../api';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import TelegramLoginButton from 'telegram-login-button'
+
 
 const Register = () => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
-
+  const {loading} = useSelector(state => state);
+ 
   const onFinish = async (values) => {
     console.log('Success:', values);
     try {
-      setLoading(true);
-      const response = await axios.post("/auth", values);
+      const {data} = await axios.post("/auth", values);
       console.log(response);
-      dispatch({ type: "REGISTER_USER", data: response.data });
+      dispatch({ type: "REGISTER", token: data.payload.token, user: data.payload.user });
       messageApi.open({
         type: 'success',
         content: 'Registration successful!',
       });
     } catch (error) {
-      console.log(error);
+      dispatch({ type: "ERROR", error: error });
       messageApi.open({
         type: 'error',
         content: 'Registration failed. Please try again.',
       });
-    } finally {
-      setLoading(false);
-    }
+    
     form.resetFields();
-    navigate("/auth");
+    // navigate("/auth");
+
+    }
 
   };
 
@@ -118,22 +119,49 @@ const Register = () => {
             span: 24,
           }}
         >
-          <Button className='w-full' type="primary" htmlType="submit" loading={loading} disabled={loading}>
+          <Button className='w-full' type="primary" htmlType="submit"  disabled={loading}>
             Register
           </Button>
         </Form.Item>
         <p>Already have an account? <a className='text-[dodgerblue] underline' href="/auth">Login</a></p>
         <Divider><span className='text-[14px] text-[gray]'>or</span></Divider>
-        <div className='w-full flex justify-center'>
-          <GoogleLogin
-            onSuccess={credentialResponse => {
-              console.log(credentialResponse);
+        <div className='w-full flex  flex-col items-center justify-center'>
+        <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              const decode = credentialResponse.credential.split('.')[1]
+              const userData = JSON.parse(atob(decode));
+              const user = {
+                username: userData.email,
+                password: userData.sub,
+                first_name: userData.given_name
+              }
+              const response = await axios.post("/auth", user);
+
+              console.log(response.data);
+
             }}
             onError={() => {
-              console.log('Login Failed');
+              console.log('Register Failed');
             }}
             useOneTap
           />
+          <br />
+          <TelegramLoginButton
+          
+                botName= "BigProject60_bot"
+                dataOnauth={async (user) => {
+                  console.log(user);
+                  const first_name = (user.first_name.slice(0, user.first_name.indexOf(" ")));
+                    const userData = {
+                        username: user.username,
+                        password: user.id,
+                        first_name: first_name
+                    }
+                    console.log(userData);
+                    const response = await axios.post("/auth", userData);
+                    console.log(response.data);
+                }}
+            />,
         </div>
       </Form>
     </div>

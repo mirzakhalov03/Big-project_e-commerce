@@ -3,32 +3,30 @@ import { Button, Checkbox, Form, Input, Divider, message } from 'antd';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from '../../../api';
 import { useDispatch } from 'react-redux';
+import TelegramLoginButton from 'telegram-login-button'
+
 
 const Login = () => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
 
   const onFinish = async (values) => {
     console.log('Success:', values);
     try {
-      setLoading(true);
       const response = await axios.post("/auth/login", values);
       console.log(response);
-      dispatch({ type: "LOGIN_USER", data: response.data });
+      dispatch({ type: "LOGIN", token: data.payload.token, user: data.payload.user });
       messageApi.open({
         type: 'success',
         content: 'Login successful!',
       });
     } catch (error) {
-      console.log(error);
+        dispatch({ type: "ERROR", error: error });
       messageApi.open({
         type: 'error',
         content: 'Login failed. Please try again.',
       });
-    } finally {
-      setLoading(false);
     }
     form.resetFields();
   };
@@ -108,16 +106,43 @@ const Login = () => {
         </Form.Item>
         <p className='text-center text-[14px]'>Don't have an account? <a className='text-[dodgerblue] underline' href="/auth/register">Register</a></p>
         <Divider><span className='text-[14px] text-[gray]'>or</span></Divider>
-        <div className='w-full flex justify-center'>
+        <div className='w-full flex-col items-center  flex justify-center'>
           <GoogleLogin
-            onSuccess={credentialResponse => {
-              console.log(credentialResponse);
+            onSuccess={async (credentialResponse) => {
+              const decode = credentialResponse.credential.split('.')[1]
+              const userData = JSON.parse(atob(decode));
+              const user = {
+                username: userData.email,
+                password: userData.sub,
+                first_name: userData.given_name
+              }
+              console.log(user);
+              const response = await axios.post("/auth/login", user);
+
+              console.log(response.data);
+
             }}
             onError={() => {
               console.log('Login Failed');
             }}
             useOneTap
           />
+          <br />
+          <TelegramLoginButton
+          
+                botName= "BigProject60_bot"
+                dataOnauth={async (user) => {
+                  const first_name = (user.first_name.slice(0, user.first_name.indexOf(" ")));
+                  const userData = {
+                    username: user.username,
+                    password: user.id,
+                    first_name: first_name
+                }
+                console.log(userData);
+                const response = await axios.post("/auth/login", userData);
+                    console.log(response.data);
+                }}
+            />,
         </div>
       </Form>
     </div>
@@ -125,3 +150,7 @@ const Login = () => {
 }
 
 export default Login;
+
+
+// BigProject60_bot
+ 
