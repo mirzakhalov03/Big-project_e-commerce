@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Checkbox, Form, Input, Divider, message } from 'antd';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from '../../../api';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TelegramLoginButton from 'telegram-login-button'
 
 
@@ -10,6 +10,8 @@ const Login = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
+  const {loading} = useSelector(state => state);
+
 
   const onFinish = async (values) => {
     console.log('Success:', values);
@@ -100,7 +102,7 @@ const Login = () => {
             span: 24,
           }}
         >
-          <Button className='w-full' type="primary" htmlType="submit" loading={loading} disabled={loading}>
+          <Button className='w-full' type="primary" htmlType="submit" disabled={loading}>
             Login
           </Button>
         </Form.Item>
