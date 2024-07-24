@@ -18,24 +18,23 @@ const Register = () => {
     console.log('Success:', values);
     try {
       const {data} = await axios.post("/auth", values);
-      console.log(response);
+      console.log(data);
       dispatch({ type: "REGISTER", token: data.payload.token, user: data.payload.user });
       messageApi.open({
         type: 'success',
         content: 'Registration successful!',
       });
+      form.resetFields();
+      navigate("/auth");
     } catch (error) {
+      console.error('Error:', error);
       dispatch({ type: "ERROR", error: error });
       messageApi.open({
         type: 'error',
         content: 'Registration failed. Please try again.',
       });
-    
-    form.resetFields();
-    // navigate("/auth");
-
+      form.resetFields();
     }
-
   };
 
   const onFinishFailed = (errorInfo) => {
