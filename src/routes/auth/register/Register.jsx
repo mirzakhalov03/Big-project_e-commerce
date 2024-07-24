@@ -5,6 +5,7 @@ import axios from '../../../api';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import TelegramLoginButton from 'telegram-login-button'
+import { ERROR, REGISTER } from '../../../redux/actions/actions';
 
 
 const Register = () => {
@@ -19,7 +20,7 @@ const Register = () => {
     try {
       const {data} = await axios.post("/auth", values);
       console.log(data);
-      dispatch({ type: "REGISTER", token: data.payload.token, user: data.payload.user });
+      dispatch({ type: REGISTER, token: data.payload.token, user: data.payload.user });
       messageApi.open({
         type: 'success',
         content: 'Registration successful!',
@@ -28,7 +29,7 @@ const Register = () => {
       navigate("/auth");
     } catch (error) {
       console.error('Error:', error);
-      dispatch({ type: "ERROR", error: error });
+      dispatch({ type: ERROR, error: error });
       messageApi.open({
         type: 'error',
         content: 'Registration failed. Please try again.',
