@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Checkbox, Form, Input, Divider, message } from 'antd';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from '../../../api';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import TelegramLoginButton from 'telegram-login-button';
-import { ERROR, LOGIN } from '../../../redux/actions/actions';
+import { toast } from 'react-toastify';
+import { ERROR, LOADING, LOGIN } from '../../../redux/actions/actions';
 
 const Login = () => {
   const [form] = Form.useForm();
@@ -16,13 +17,16 @@ const Login = () => {
 
   const onFinish = async (values) => {
     try {
+        dispatch({ type: LOADING, loading: true });
       const response = await axios.post("/auth/login", values);
       const data = response.data;  
       console.log(data);
-      
       const { token, user } = data.payload;
-      
-      dispatch({ type: LOGIN, token, user });
+      dispatch({ type: LOGIN, payload: { token, user } });
+      if(data?.payload?.token) {
+        toast("Login successful!", { type: "success" });
+        navigate("/dashboard");
+      }
       
       messageApi.open({
         type: 'success',
@@ -30,7 +34,6 @@ const Login = () => {
       });
       
       form.resetFields();
-      navigate("/dashboard"); // Redirect to the dashboard
     } catch (error) {
       console.error('Login failed:', error);
       dispatch({ type: ERROR, error: error.message });
@@ -57,14 +60,14 @@ const Login = () => {
       
       const { token, user: userInfo } = data.payload;
       
-      dispatch({ type: LOGIN, token, user: userInfo });
+      dispatch({ type: LOGIN, payload: { token, user: userInfo } });
       
       messageApi.open({
         type: 'success',
         content: 'Login successful!',
       });
       
-      navigate("/dashboard"); // Redirect to the dashboard
+      navigate("/dashboard"); 
     } catch (error) {
       console.error('Google login failed:', error);
       dispatch({ type: ERROR, error: error.message });
@@ -90,14 +93,14 @@ const Login = () => {
       
       const { token, user: userInfo } = data.payload;
       
-      dispatch({ type: LOGIN, token, user: userInfo });
+      dispatch({ type: LOGIN, payload: { token, user: userInfo } });
       
       messageApi.open({
         type: 'success',
         content: 'Login successful!',
       });
       
-      navigate("/dashboard"); // Redirect to the dashboard
+      navigate("/dashboard"); 
     } catch (error) {
       console.error('Telegram login failed:', error);
       dispatch({ type: ERROR, error: error.message });

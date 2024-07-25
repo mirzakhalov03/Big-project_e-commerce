@@ -13,10 +13,12 @@ export const authReducer = (state = initialState, action) => {
   switch(action.type) {
     case LOGIN:
     case REGISTER:
+      const { token, user } = action.payload;
+      localStorage.setItem('token', token);
       return {
         ...state,
-        token: action.payload?.token || null,
-        user: action.payload?.user || null,
+        token: token || null,
+        user: user || null,
         loading: false,
         error: null,
         isError: false,
@@ -33,9 +35,16 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.payload?.error || "An error occurred", // Use actual error message if available
+        error: action.payload?.error || "An error occurred", 
         isError: true,
         isSuccess: false,
+      };
+    case "SIGN_OUT":
+      localStorage.removeItem('token');
+      return {
+        ...state,
+        token: null,
+        user: null,
       };
     default:
       return state;

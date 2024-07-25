@@ -1,14 +1,20 @@
 import { lazy } from "react"
-import { useRoutes } from "react-router-dom"
-import Login from "./auth/login/Login"
-import Register from "./auth/register/Register"
+import { Navigate, useRoutes } from "react-router-dom"
+const Login = lazy(() => import("./auth/login/Login"))
+const Register = lazy(() => import("./auth/register/Register"))
+const Products = lazy(() => import("./dashboard/products/Products"))
+const Users = lazy(() => import("./dashboard/users/Users"))
 const Home = lazy(() => import("./home/Home"))
 const Auth = lazy(() => import("./auth/Auth"))
+const Profile = lazy(() => import("./profile/Profile"))
 import Suspense from "../utils/index"
-const Dashboard = lazy(() => import("./dasboard/Dashboard"))
+import Private from "./private/Private"
+import { useSelector } from "react-redux"
+const Dashboard = lazy(() => import("./dashboard/Dashboard"))
 
 
 const RouteController = () => {
+    const auth = useSelector(state => state);
     
     return useRoutes([
         {
@@ -17,7 +23,7 @@ const RouteController = () => {
         },
         {
             path: "auth",
-            element: <Suspense><Auth /></Suspense>,
+            element: auth.token ? <Navigate to="/dashboard" /> : <Suspense><Auth /></Suspense>,
             children: [
                 {
                     path: "",
@@ -31,7 +37,28 @@ const RouteController = () => {
         },
         {
             path: "dashboard",
-            element: <Suspense><Dashboard/></Suspense>
+            element: <Suspense><Private/></Suspense>,
+            children: [
+                {
+                    path: "",
+                    element: <Suspense><Dashboard/></Suspense>,
+                    children: [
+                        {
+                            path: "/dashboard/products",
+                            element: <Suspense><Products /></Suspense>
+                        },
+                        {
+                            path: "/dashboard/users",
+                            element: <Suspense><Users /></Suspense>
+                        }
+                    ]
+                },
+                {
+                    path: "/dashboard/profile",
+                    element: <Suspense><Profile /></Suspense>
+                }
+
+            ]
         }
     ])
   

@@ -1,0 +1,10 @@
+.ant-layout-sider-children{
+    display: flex;
+    flex-direction: column;
+}
+
+.ant-menu-item:has(.active){
+    color: white;
+    background-color: dodgerblue;
+}
+
