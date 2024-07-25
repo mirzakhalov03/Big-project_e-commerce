@@ -29,9 +29,9 @@ const Dashboard = () => {
     const showConfirm = () => {
 
         confirm({
-          title: 'Do you want to delete these items?',
+          title: 'Do you want to log out?',
           icon: <ExclamationCircleFilled />,
-          content: 'Some descriptions',
+          content: 'Remember! All data will be lost.',
           onOk() {
             console.log('OK');
             dispatch({ type: SIGN_OUT});
