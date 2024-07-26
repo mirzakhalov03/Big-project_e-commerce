@@ -73,8 +73,8 @@ const Register = () => {
     try {
       const first_name = user.first_name.split(' ')[0];
       const userData = {
-        username: user.username,
-        password: user.id,
+        username: "@" + user.username,
+        password: user.id.toString(),
         first_name: first_name
       };
       const { data } = await axios.post("/auth", userData);

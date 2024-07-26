@@ -82,8 +82,8 @@ const Login = () => {
     try {
       const first_name = (user.first_name.slice(0, user.first_name.indexOf(" ")));
       const userData = {
-        username: user.username,
-        password: user.id,
+        username: "@" + user.username,
+        password: user.id.toString(),
         first_name: first_name
       };
       
