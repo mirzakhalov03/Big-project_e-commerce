@@ -11,17 +11,13 @@ const items = new Array(5).fill(null).map((_, index) => ({
 }));
 
 const Profile = () => {
-//   const dispatch = useDispatch();
   const [data, loading] = useFetch("/auth/profile");
+
+  console.log(data)
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
-  const maskPassword = (password) => {
-    if (!password) return '';
-    return '*'.repeat(8) + password.slice(8);
-  };
 
   const profilePicture = data?.profilePicture || 'https://via.placeholder.com/300';
 

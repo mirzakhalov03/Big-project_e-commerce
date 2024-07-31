@@ -12,7 +12,7 @@ const Login = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
-  const { loading } = useSelector(state => state);
+  const loading = useSelector(state => state.loading);
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
@@ -144,7 +144,7 @@ const Login = () => {
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password />
+          <Input.Password autoComplete="off" />
         </Form.Item>
 
         <Form.Item

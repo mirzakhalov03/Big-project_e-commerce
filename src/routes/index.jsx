@@ -14,7 +14,8 @@ const Dashboard = lazy(() => import("./dashboard/Dashboard"))
 
 
 const RouteController = () => {
-    const auth = useSelector(state => state);
+    const auth = useSelector(state => state.token);
+    
     
     return useRoutes([
         {
@@ -23,7 +24,7 @@ const RouteController = () => {
         },
         {
             path: "auth",
-            element: auth.token ? <Navigate to="/dashboard" /> : <Suspense><Auth /></Suspense>,
+            element: auth? <Navigate to="/dashboard" /> : <Suspense><Auth /></Suspense>,
             children: [
                 {
                     path: "",
