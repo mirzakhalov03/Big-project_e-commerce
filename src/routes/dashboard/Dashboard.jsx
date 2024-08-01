@@ -46,6 +46,7 @@ const Dashboard = () => {
           },
         });
       };
+      console.log(data?.photo_url)
 
     return (
         <>
@@ -59,16 +60,17 @@ const Dashboard = () => {
                     <Menu
                         theme="dark"
                         mode="inline"
+                        defaultSelectedKeys={['1']}
                         items={[
                             {
                                 key: '1',
                                 icon: <BsDropbox />,
-                                label: <NavLink to={"/dashboard/products"}>Products</NavLink>,
+                                label: <NavLink to="/dashboard" activeClassName="active-link">Products</NavLink>,
                             },
                             {
                                 key: '2',
                                 icon: <UserOutlined />,
-                                label: <NavLink to={"/dashboard/users"}>Users</NavLink>,
+                                label: <NavLink to="/dashboard/users" activeClassName="active-link">Users</NavLink>,
                             },
                         ]}
                     />
@@ -89,11 +91,15 @@ const Dashboard = () => {
                                 color: "white"
                             }}
                         />
-                        <Search className='w-[500px]' placeholder="input search text"  onChange={onChange} enterButton />
+                        <Search className='w-[500px]' placeholder="Search products..."  onChange={onChange} enterButton />
                         <Link to={"/dashboard/profile"} className="flex items-center gap-2 p-5">
                             {
                                 loading ? <p className="text-[white]">Loading...</p> : <>
-                                    <Avatar style={{ backgroundColor: '#87d068',}}> {data?.first_name.at(0)}</Avatar>
+                                    <Avatar style={{ backgroundColor: 'dodgerblue',}} > 
+                                    {
+                                        data?.photo_url ? <img style={{objectFit: "cover", width: "40px", height: "40px"}} src={data?.photo_url} alt="" /> : data?.first_name.at(0)
+                                    }
+                                    </Avatar>
                                     <span className="text-[white]">{data?.first_name}</span>
                                 </>
                             }

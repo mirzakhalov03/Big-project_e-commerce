@@ -45,7 +45,7 @@ const RouteController = () => {
                     element: <Suspense><Dashboard/></Suspense>,
                     children: [
                         {
-                            path: "/dashboard/products",
+                            path: "",
                             element: <Suspense><Products /></Suspense>
                         },
                         {

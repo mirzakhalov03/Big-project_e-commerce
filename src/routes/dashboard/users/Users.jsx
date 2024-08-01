@@ -101,10 +101,9 @@ const Users = () => {
     fetchProducts();
   }, []);
 
+  console.log(profileData?.role);
+
   return (
-    
-
-
     
     <div>
       {

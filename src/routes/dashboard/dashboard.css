@@ -1,9 +1,9 @@
-.ant-layout-sider-children{
+.ant-layout-sider-children {
     display: flex;
     flex-direction: column;
 }
 
-.ant-menu-item:has(.active){
+.ant-menu-item .active-link {
     color: white;
     background-color: dodgerblue;
 }
