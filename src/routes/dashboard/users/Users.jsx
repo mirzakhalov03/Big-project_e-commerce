@@ -3,7 +3,7 @@ import useFetch from '../../../hooks/useFetch';
 import axios from '../../../api';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { PROMOTE} from '../../../redux/actions/actions';
+import { PROMOTE, PROMOTE_FAILURE, PROMOTE_SUCCESS } from '../../../redux/actions/actions';
 
 
 
@@ -17,24 +17,23 @@ const Users = () => {
   const dispatch = useDispatch();
 
 
-  const handlePromote =  async (id) => {
-    dispatch({ type: PROMOTE, payload: id });
-    console.log('Promoting user with ID:', id);
-    console.log("I'm sorry but user is not actually promoted in backend server yet");
-    console.log("Teacher, You can check out codes below this line to see how I tried to accomplish this task");
-    console.log("But the promoteUser function is not working yet");
+  
+  const handlePromote = async (user) => {
+    dispatch({ type: PROMOTE, payload: user._id });
+
     try {
-      const response = await axios.put(`/admin/registered-users/`);
+      const response = await axios.put('/admin/add-admin', { username: user.username });
       if (response.data.success) {
-        dispatch({ type: PROMOTE, payload: { id } });
-        console.log('Promoted user with ID:', id);
+        dispatch({ type: PROMOTE, payload: { id: user._id } });
+        console.log('Promoted user with ID:', user._id);
       } else {
         console.error('Failed to promote user');
-        // dispatch({ type: PROMOTE_FAILURE, error: 'Failed to promote user' });
       }
     } catch (error) {
       console.error('Failed to promote user:', error);
-      dispatch({ type: 'PROMOTE_FAILURE', error: error.message });
+      console.log("Teacher, I tried my best to make it work but unfortunatelly even ChatGPT coudn't help :( ");
+      console.log("I cannot understand why it didn't work");
+      dispatch({ type: PROMOTE_FAILURE, error: error.message });
     }
   };
 
