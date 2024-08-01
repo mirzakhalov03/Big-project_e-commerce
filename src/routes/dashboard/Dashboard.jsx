@@ -11,17 +11,22 @@ const { Search } = Input;
 const { confirm } = Modal;
 import "./dashboard.css";
 import { SIGN_OUT } from "../../redux/actions/actions";
+import shopifyLogo from "./shopifyLogo.png";
 
 
 
 
-const onSearch = (value, _e, info) => console.log(info?.source, value);
+
 
 const Dashboard = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [data, loading] = useFetch("/auth/profile");
+    const [searchQuery, setSearchQuery] = useState('');
     const dispatch = useDispatch();
 
+
+    const onChange = (e) => setSearchQuery(e.target.value)
+    
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -46,10 +51,10 @@ const Dashboard = () => {
         <>
             <Layout>
                 <Sider className='min-h-screen' trigger={null} collapsible collapsed={collapsed}>
-                    <div className="demo-logo-vertical w-full h-[80px] ">
-                        <img className='w-full h-[80%] p-[10px]' src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="logo" />
+                    <NavLink style={{padding: "20px", display: "flex", gap: "5px", flexDirection: "column", justifyContent: "center", alignItems: "center"}} to={"/"} className="demo-logo-vertical w-full h-[80px] ">
+                        <img style={{ width: "50px", marginTop: "20px" }} src={shopifyLogo} alt="" />
                         <p className='text-[white] text-center '>SHOPIFY</p>
-                    </div>
+                    </NavLink>
                     <br />
                     <Menu
                         theme="dark"
@@ -84,7 +89,7 @@ const Dashboard = () => {
                                 color: "white"
                             }}
                         />
-                        <Search className='w-[500px]' placeholder="input search text" onSearch={onSearch} enterButton />
+                        <Search className='w-[500px]' placeholder="input search text"  onChange={onChange} enterButton />
                         <Link to={"/dashboard/profile"} className="flex items-center gap-2 p-5">
                             {
                                 loading ? <p className="text-[white]">Loading...</p> : <>
@@ -104,7 +109,7 @@ const Dashboard = () => {
                             borderRadius: borderRadiusLG,
                         }}
                     >
-                        <Outlet />
+                        <Outlet context={[searchQuery]} />
                     </Content>
                 </Layout>
             </Layout>

@@ -1,0 +1,29 @@
+.cardBtnsContainer{
+    width: 200px;
+    background-color: rgba(0, 0, 0, 0.804);
+    margin: 10px auto;
+    border-radius: 50px;
+    display: flex;
+    overflow: hidden;
+
+
+
+    .cardBtns{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 8px;
+        color: white;
+        transition: .3s;
+        
+    
+        &:hover{
+            cursor: pointer;
+            background-color: rgb(167, 167, 167);
+
+        }
+    }
+}
+
+

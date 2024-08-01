@@ -1,4 +1,4 @@
-import { ERROR, LOADING, LOGIN, REGISTER } from "../actions/actions";
+import { ERROR, LOADING, LOGIN, REGISTER, SIGN_OUT, PROMOTE } from "../actions/actions";
 
 const initialState = {
   token: localStorage.getItem('token') || null,
@@ -39,12 +39,20 @@ export const authReducer = (state = initialState, action) => {
         isError: true,
         isSuccess: false,
       };
-    case "SIGN_OUT":
+    case SIGN_OUT:
       localStorage.removeItem('token');
       return {
         ...state,
         token: null,
         user: null,
+      };
+    case PROMOTE:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        isError: false,
+        isSuccess: false,
       };
     default:
       return state;

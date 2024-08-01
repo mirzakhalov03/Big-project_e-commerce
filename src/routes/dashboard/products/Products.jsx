@@ -1,8 +1,9 @@
 import React from 'react'
+import MainTable from '../../../components/table/MainTable'
 
 const Products = () => {
   return (
-    <div>Products</div>
+    <div><MainTable /></div>
   )
 }
 

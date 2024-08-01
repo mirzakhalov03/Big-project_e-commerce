@@ -2,7 +2,6 @@ import React from 'react';
 import { Layout, Menu, Spin, Typography, Row, Col, Avatar, theme } from 'antd';
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
-import { useDispatch } from 'react-redux';
 import useFetch from '../../hooks/useFetch';
 
 const items = new Array(5).fill(null).map((_, index) => ({
@@ -19,7 +18,7 @@ const Profile = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const profilePicture = data?.profilePicture || 'https://via.placeholder.com/300';
+  const profilePicture = data?.photo_url || 'https://via.placeholder.com/300';
 
   return (
     <div>
