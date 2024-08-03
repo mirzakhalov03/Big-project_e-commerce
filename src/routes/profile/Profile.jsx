@@ -9,9 +9,7 @@ import shopifyLogo from "../dashboard/shopifyLogo.png";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
   UserOutlined,
-  VideoCameraOutlined,
 } from '@ant-design/icons';
 import Loading from "../../utils/Loading";
 

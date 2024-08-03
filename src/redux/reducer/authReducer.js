@@ -1,4 +1,4 @@
-import { ERROR, LOADING, LOGIN, REGISTER, SIGN_OUT, PROMOTE } from "../actions/actions";
+import { ERROR, LOADING, LOGIN, REGISTER, SIGN_OUT, PROMOTE, PRODUCT_ID, PROMOTE_SUCCESS, ADD_TO_CART, REMOVE_FROM_CART } from "../actions/actions";
 
 const initialState = {
   token: localStorage.getItem('token') || null,
@@ -7,6 +7,9 @@ const initialState = {
   error: null,
   isError: false,
   isSuccess: false,
+  productID: null,
+  promote: false,
+  cart: JSON.parse(localStorage.getItem('cart')) || [], 
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -45,6 +48,13 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         token: null,
         user: null,
+        loading: false,
+        error: null,
+        isError: false,
+        isSuccess: false,
+        productID: null,
+        promote: false,
+        cart: [], 
       };
     case PROMOTE:
       return {
@@ -53,6 +63,42 @@ export const authReducer = (state = initialState, action) => {
         error: null,
         isError: false,
         isSuccess: false,
+      };
+    case PROMOTE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        promote: true,
+        isSuccess: true,
+      };
+    case PRODUCT_ID:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        isError: false,
+        isSuccess: false,
+        productID: action.payload
+      };
+    case ADD_TO_CART:
+      localStorage.setItem('cart', JSON.stringify([...state.cart, action.payload]));
+      return {
+        ...state,
+        cart: [...state.cart, action.payload], 
+        loading: false,
+        error: null,
+        isError: false,
+        isSuccess: true,
+      };
+    case REMOVE_FROM_CART:
+      localStorage.removeItem('cart', JSON.stringify(state.cart.filter(item => item.id !== action.payload.id)));
+      return {
+        ...state,
+        cart: state.cart.filter(item => item.id !== action.payload.id), 
+        loading: false,
+        error: null,
+        isError: false,
+        isSuccess: true,
       };
     default:
       return state;

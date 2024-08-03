@@ -10,6 +10,8 @@ const Profile = lazy(() => import("./profile/Profile"))
 import Suspense from "../utils/index"
 import Private from "./private/Private"
 import { useSelector } from "react-redux"
+import SinglePage from "./singlePage/SinglePage"
+import Cart from "./cart/Cart"
 const Dashboard = lazy(() => import("./dashboard/Dashboard"))
 
 
@@ -20,7 +22,15 @@ const RouteController = () => {
     return useRoutes([
         {
             path: "",
-            element: <Suspense><Home /></Suspense>
+            element: <Suspense><Home /></Suspense>,
+        },
+        {
+            path: "/single-product/:id",
+            element: <Suspense><SinglePage /></Suspense>
+        },
+        {
+            path: "cart",
+            element: <Suspense><Cart /></Suspense>
         },
         {
             path: "auth",

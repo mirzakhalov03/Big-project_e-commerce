@@ -3,7 +3,7 @@ import useFetch from '../../../hooks/useFetch';
 import axios from '../../../api';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { PROMOTE, PROMOTE_FAILURE, PROMOTE_SUCCESS } from '../../../redux/actions/actions';
+import { PROMOTE, PROMOTE_FAILURE } from '../../../redux/actions/actions';
 
 
 
@@ -22,7 +22,7 @@ const Users = () => {
     dispatch({ type: PROMOTE, payload: user._id });
 
     try {
-      const response = await axios.put('/admin/add-admin', { username: user.username });
+      const response = await axios.post('/admin/add-admin', { username: user.username });
       if (response.data.success) {
         dispatch({ type: PROMOTE, payload: { id: user._id } });
         console.log('Promoted user with ID:', user._id);
