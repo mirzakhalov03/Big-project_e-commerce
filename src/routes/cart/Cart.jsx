@@ -26,13 +26,12 @@ const Cart = () => {
         dispatch({ type: REMOVE_FROM_CART, payload: updatedItems });
     };
 
-    const formattedCartItems = cartItems.map(item => ({
-        key: item.id,
-        price: item.price,
-        image: item.image,
-        name: item.name,
-        quantity: item.quantity
-    }));
+    const formattedCartItems = cartItems?.map(item => {
+        console.log(item);
+        return { ...item, image: item.product_images[0], name: item.product_name, price: item.sale_price, quantity: item.quantity };
+    });
+
+    console.log(formattedCartItems);
 
     const columns = [
         {
