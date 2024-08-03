@@ -91,8 +91,10 @@ export const authReducer = (state = initialState, action) => {
         isError: false,
         isSuccess: true,
       };
-    case REMOVE_FROM_CART:
-      const updatedCartRemove = state.cart.filter(item => item.id !== action.payload.id);
+      case REMOVE_FROM_CART:
+      console.log('REMOVE_FROM_CART payload:', action.payload);
+      const updatedCartRemove = state.cart.filter(item => item.id !== action.payload);
+      console.log('Updated cart after removal:', updatedCartRemove);
       localStorage.setItem('cart', JSON.stringify(updatedCartRemove));
       return {
         ...state,

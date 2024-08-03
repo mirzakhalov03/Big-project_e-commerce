@@ -28,8 +28,10 @@ const Cart = () => {
     };
 
     const handleRemove = (key) => {
-        const updatedItems = cartItems.filter(item => item.key !== key);
-        dispatch({ type: REMOVE_FROM_CART, payload: updatedItems });
+        // console.log(key);
+        dispatch({ type: REMOVE_FROM_CART, payload: key });
+        // console.log(cartItems);
+        // localStorage.setItem('cart', JSON.stringify(cartItems.filter(item => {console.log(item); return item.key !== key})));
     };
 
     const formattedCartItems = cartItems?.map(item => ({
