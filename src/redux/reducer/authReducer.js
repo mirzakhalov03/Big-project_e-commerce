@@ -1,4 +1,4 @@
-import { ERROR, LOADING, LOGIN, REGISTER, SIGN_OUT, PROMOTE, PRODUCT_ID, PROMOTE_SUCCESS, ADD_TO_CART, REMOVE_FROM_CART } from "../actions/actions";
+import { ERROR, LOADING, LOGIN, REGISTER, SIGN_OUT, PROMOTE, PRODUCT_ID, PROMOTE_SUCCESS, ADD_TO_CART, REMOVE_FROM_CART, INCREMENT, DECREMENT } from "../actions/actions";
 
 const initialState = {
   token: localStorage.getItem('token') || null,
@@ -81,25 +81,60 @@ export const authReducer = (state = initialState, action) => {
         productID: action.payload
       };
     case ADD_TO_CART:
-      localStorage.setItem('cart', JSON.stringify([...state.cart, action.payload]));
+      const updatedCartAdd = [...state.cart, action.payload];
+      localStorage.setItem('cart', JSON.stringify(updatedCartAdd));
       return {
         ...state,
-        cart: [...state.cart, action.payload], 
+        cart: updatedCartAdd,
         loading: false,
         error: null,
         isError: false,
         isSuccess: true,
       };
     case REMOVE_FROM_CART:
-      localStorage.removeItem('cart', JSON.stringify(state.cart.filter(item => item.id !== action.payload.id)));
+      const updatedCartRemove = state.cart.filter(item => item.id !== action.payload.id);
+      localStorage.setItem('cart', JSON.stringify(updatedCartRemove));
       return {
         ...state,
-        cart: state.cart.filter(item => item.id !== action.payload.id), 
+        cart: updatedCartRemove,
         loading: false,
         error: null,
         isError: false,
         isSuccess: true,
       };
+
+    case INCREMENT:
+      const updatedCartIncrement = state.cart.map(item => {
+        if (item.id === action.payload) {
+          return {
+            ...item,
+            quantity: item.quantity + 1
+          };
+        }
+        return item;
+      });
+      localStorage.setItem('cart', JSON.stringify(updatedCartIncrement));
+      return {
+        ...state,
+        cart: updatedCartIncrement
+      };
+
+    case DECREMENT: 
+      const updatedCartDecrement = state.cart.map(item => {
+        if (item.id === action.payload) {
+          return {
+            ...item,
+            quantity: Math.max(item.quantity - 1, 0) 
+          };
+        }
+        return item;
+      });
+      localStorage.setItem('cart', JSON.stringify(updatedCartDecrement));
+      return {
+        ...state,
+        cart: updatedCartDecrement
+      };
+
     default:
       return state;
   }

@@ -4,21 +4,27 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Nav from '../../components/nav/Nav';
 import { Button, Table } from 'antd';
-import { REMOVE_FROM_CART} from "../../redux/actions/actions"; 
+import { REMOVE_FROM_CART, INCREMENT, DECREMENT,  } from "../../redux/actions/actions"; 
 
 const Cart = () => {
     const cartItems = useSelector((state) => state.cart);
     const dispatch = useDispatch();
     
-    const handleQuantityChange = (key, increment) => {
+    const handleIncrement = (key) => {
+        console.log(key);
+        dispatch({ type: INCREMENT, payload: key });
+        
+    };
+
+    const handleDecrement = (key) => {
         const updatedItems = cartItems.map(item => {
             if (item.key === key) {
-                const newQuantity = item.quantity + increment;
-                return { ...item, quantity: newQuantity > 0 ? newQuantity : 0 };
+                const newQuantity = item.quantity - 1;
+                return { ...item, quantity: newQuantity > 0 ? newQuantity : 1 }; 
             }
             return item;
         });
-        dispatch({ type: UPDATE_CART, payload: updatedItems });
+        dispatch({ type: DECREMENT, payload: updatedItems });
     };
 
     const handleRemove = (key) => {
@@ -26,12 +32,14 @@ const Cart = () => {
         dispatch({ type: REMOVE_FROM_CART, payload: updatedItems });
     };
 
-    const formattedCartItems = cartItems?.map(item => {
-        console.log(item);
-        return { ...item, image: item.product_images[0], name: item.product_name, price: item.sale_price, quantity: item.quantity };
-    });
-
-    console.log(formattedCartItems);
+    const formattedCartItems = cartItems?.map(item => ({
+        ...item,
+        key: item._id,
+        image: item.product_images[0],
+        name: item.product_name,
+        price: item.sale_price,
+        quantity: item.quantity || 1 
+    }));
 
     const columns = [
         {
@@ -69,11 +77,11 @@ const Cart = () => {
             key: 'quantity',
             render: (text, record) => (
                 <div className='text-center w-[100px] flex items-center justify-between bg-blue-300 rounded-lg'>
-                    <button onClick={() => handleQuantityChange(record.key, -1)} className='text-white w-full flex items-center justify-center text-xl rounded'>
+                    <button onClick={() => handleDecrement(record.key)} className='text-white w-full flex items-center justify-center text-xl rounded'>
                         <AiOutlineMinusCircle />
                     </button>
                     <span className='text-2xl text-white'>{record.quantity}</span>
-                    <button onClick={() => handleQuantityChange(record.key, 1)} className='text-white w-full flex items-center justify-center text-xl rounded'>
+                    <button onClick={() => handleIncrement(record.key)} className='text-white w-full flex items-center justify-center text-xl rounded'>
                         <AiOutlinePlusCircle />
                     </button>
                 </div>
@@ -82,7 +90,7 @@ const Cart = () => {
         {
             title: 'Total',
             key: 'total',
-            render: (text, record) => <span>${record.price * record.quantity}</span>
+            render: (text, record) => <span>${(record.price * record.quantity).toFixed(2)}</span> // Ensure total is displayed as a fixed-point number
         }
     ];
 
@@ -91,7 +99,7 @@ const Cart = () => {
             <Nav />
             <div className="container">
                 <h1 className='text-4xl p-3'>Cart</h1>
-                <Table columns={columns} dataSource={formattedCartItems} />
+                <Table columns={columns} dataSource={formattedCartItems} rowKey={(item) => item.key} />
             </div>
         </div>
     );
